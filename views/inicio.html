@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="tarjetas">
+    <div class="tarjeta vigente">
+        <h3>Vigentes</h3>
+        <p>{{ conteo.get('Vigente', 0) }}</p>
+    </div>
+    <div class="tarjeta por-vencer">
+        <h3>Por vencer</h3>
+        <p>{{ conteo.get('Por vencer', 0) }}</p>
+    </div>
+    <div class="tarjeta vencida">
+        <h3>Vencidas</h3>
+        <p>{{ conteo.get('Vencida', 0) }}</p>
+    </div>
+</section>
+
+<section class="acciones">
+    <a href="{{ url_for('polizas.descargar_avisos') }}" class="boton descargar">
+        Descargar todos los avisos (.zip)
+    </a>
+</section>
+
+<section class="panel primas">
+    <h2>Primas por aseguradora (no vencidas)</h2>
+    <ul>
+        {% for aseguradora, monto in primas.items() %}
+            <li><strong>{{ aseguradora }}</strong>: {{ monto|moneda }}</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section class="panel inconsistencias">
+    <h2>Inconsistencias ({{ inconsistencias|length }})</h2>
+    <ul>
+        {% for inc in inconsistencias %}
+            <li>{{ inc }}</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section class="tabla">
+    <h2>Pólizas (ordenadas por días para vencer)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Póliza</th>
+                <th>Asegurado</th>
+                <th>Cédula</th>
+                <th>Aseguradora</th>
+                <th>Ramo</th>
+                <th>Vence</th>
+                <th>Días</th>
+                <th>Prima anual</th>
+                <th>Estado</th>
+                <th>Aviso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in resultados %}
+            <tr class="fila-{{ r.estado|lower }}{% if not r.en_maestro %} no-maestro{% endif %}{% if r.prima is none %} sin-prima{% endif %}">
+                <td>{{ r.numero }}</td>
+                <td>{{ r.nombre }}</td>
+                <td>{{ r.cedula }}</td>
+                <td>{{ r.aseguradora }}</td>
+                <td>{{ r.ramo }}</td>
+                <td>{{ r.hasta|fecha }}</td>
+                <td>{{ r.dias if r.dias is not none else '—' }}</td>
+                <td>{{ r.prima|moneda }}</td>
+                <td><span class="estado">{{ r.estado }}</span></td>
+                <td>
+                    {% if r.estado in ('Por vencer', 'Vencida') %}
+                        <a href="{{ url_for('polizas.aviso', numero=r.numero) }}" target="_blank" class="enlace-aviso">Ver aviso</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                {% if not r.en_maestro %}
+                    <td class="etiqueta">no está en el maestro</td>
+                {% elif r.prima is none %}
+                    <td class="etiqueta">sin prima</td>
+                {% else %}
+                    <td>—</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}

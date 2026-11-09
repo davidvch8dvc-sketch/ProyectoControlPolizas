@@ -1,0 +1,41 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+var/
+sdist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Archivos temporales y de prueba
+prueba_laura.pdf
+_test_*.py
+
+# uv / Python version
+.python-version
+uv.lock
+
+# Sistema
+.DS_Store
+Thumbs.db
+.env
+*.log
+
+# Datos (junction de Windows, no se sube al repo)
+data/

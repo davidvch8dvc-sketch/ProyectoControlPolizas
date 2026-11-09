@@ -1,0 +1,23 @@
+[project]
+name = "proyectocontrolpolizas"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "David", email = "davidvch8.dvc@gmail.com" }
+]
+requires-python = ">=3.15"
+dependencies = [
+    "flask>=3.1.3",
+    "fpdf2>=2.9.0",
+    "openpyxl>=3.1.5",
+    "pandas>=3.1.1",
+    "pdfplumber>=0.11.10",
+]
+
+[project.scripts]
+proyectocontrolpolizas = "proyectocontrolpolizas:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"

@@ -1,0 +1,306 @@
+/* public/static/estilos.css - Diseño limpio, rojo, negro y gris claro */
+/* Colores: rojo #AE1800, negro #201E1D, gris claro #F3F2F2 */
+
+:root {
+    --rojo: #AE1800;
+    --rojo-claro: #FDECEA;
+    --ambar: #F9A825;
+    --ambar-claro: #FFF6E0;
+    --verde: #2E7D32;
+    --negro: #201E1D;
+    --gris-claro: #F3F2F2;
+    --gris-texto: #666666;
+    --blanco: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--gris-claro);
+    color: var(--negro);
+    line-height: 1.5;
+}
+
+/* ========== Cabecera ========== */
+.cabecera {
+    background-color: var(--rojo);
+    border-bottom: 4px solid var(--negro);
+    color: var(--blanco);
+}
+
+.contenedor-cabecera {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.marca {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.fecha {
+    font-size: 1rem;
+    opacity: 0.95;
+}
+
+/* ========== Contenido ========== */
+.contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+}
+
+/* ========== Tarjetas ========== */
+.tarjetas {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tarjeta {
+    flex: 1 1 150px;
+    background: var(--blanco);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tarjeta h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tarjeta p {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+.tarjeta.vigente p { color: var(--verde); }
+.tarjeta.por-vencer p { color: var(--ambar); }
+.tarjeta.vencida p { color: var(--rojo); }
+
+/* ========== Acciones ========== */
+.acciones {
+    margin-bottom: 1.5rem;
+}
+
+.boton {
+    display: inline-block;
+    background-color: var(--rojo);
+    color: var(--blanco);
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.boton:hover {
+    background-color: #9a1400;
+}
+
+/* ========== Paneles ========== */
+.panel {
+    background: var(--blanco);
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.panel h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--rojo);
+    padding-bottom: 0.5rem;
+}
+
+.panel ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.25rem;
+}
+
+.panel li {
+    margin-bottom: 0.4rem;
+}
+
+/* ========== Tabla ========== */
+.tabla {
+    background: var(--blanco);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.tabla h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 2px solid var(--rojo);
+    background: var(--gris-claro);
+}
+
+.tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.tabla th,
+.tabla td {
+    border: 1px solid #ddd;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tabla th {
+    background-color: var(--gris-claro);
+    font-weight: bold;
+    color: var(--negro);
+}
+
+.tabla tr:nth-child(even) {
+    background: #FAFAFA;
+}
+
+/* Filas por estado */
+.fila-vencida {
+    background-color: var(--rojo-claro);
+}
+
+.fila-por-vencer {
+    background-color: var(--ambar-claro);
+}
+
+.estado {
+    font-weight: bold;
+}
+
+.estado-vencida { color: var(--rojo); }
+.estado-por-vencer { color: var(--ambar); }
+.estado-vigente { color: var(--verde); }
+
+/* Etiquetas especiales */
+.etiqueta {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--rojo);
+    font-weight: bold;
+}
+
+/* Enlaces de aviso */
+.enlace-aviso {
+    color: var(--rojo);
+    text-decoration: underline;
+    font-size: 0.85rem;
+}
+
+.enlace-aviso:hover {
+    text-decoration: none;
+}
+
+/* ========== Pie de página ========== */
+.pie {
+    background: var(--blanco);
+    border-top: 1px solid #ddd;
+    color: var(--gris-texto);
+    font-size: 0.8rem;
+    padding: 1rem 1.5rem;
+    margin-top: 2rem;
+}
+
+/* ========== Responsive (celular) ========== */
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+
+    .tarjetas {
+        flex-direction: column;
+    }
+
+    .contenedor-cabecera {
+        padding: 1rem;
+    }
+
+    .marca {
+        font-size: 1.25rem;
+    }
+
+    .panel,
+    .tabla {
+        padding: 0.75rem;
+    }
+
+    .tabla table {
+        font-size: 0.8rem;
+    }
+
+    .tabla th,
+    .tabla td {
+        padding: 0.4rem 0.5rem;
+    }
+
+    .acciones {
+        text-align: center;
+    }
+
+    .boton {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .tabla thead {
+        display: none;
+    }
+
+    .tabla tr {
+        display: block;
+        margin-bottom: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+    }
+
+    .tabla td {
+        display: block;
+        text-align: right;
+        padding: 0.5rem;
+        border: none;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .tabla td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0.5rem;
+        width: 45%;
+        text-align: left;
+        font-weight: bold;
+        color: var(--negro);
+    }
+}

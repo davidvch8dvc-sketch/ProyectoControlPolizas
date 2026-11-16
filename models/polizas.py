@@ -30,9 +30,9 @@ def estado_poliza(hasta, fecha_corte=FECHA_CORTE):
         return "Vigente"
 
 
-def _indexar_clientes():
+def _indexar_clientes(ruta_clientes=None):
     """Lee el maestro de clientes y devuelve un dict: cedula -> correo."""
-    df = cargar_clientes()
+    df = cargar_clientes(ruta_clientes)
     index = {}
     for _, fila in df.iterrows():
         cedula = str(fila["Cedula"]).strip()
@@ -50,11 +50,11 @@ def pd_notna(valor):
     return valor is not None and str(valor).strip() != "" and str(valor).lower() != "nan"
 
 
-def calcular_resultados(fecha_corte=FECHA_CORTE):
+def calcular_resultados(ruta_clientes=None, fecha_corte=FECHA_CORTE):
     """Cruza cada póliza con el maestro por cédula, calcula días hasta vencer
     y estado, y devuelve una lista de diccionarios ordenada de menos a más
     días (lo urgente primero)."""
-    clientes_por_cedula = _indexar_clientes()
+    clientes_por_cedula = _indexar_clientes(ruta_clientes)
     cedulas_maestro = set(clientes_por_cedula.keys())
 
     polizas = cargar_polizas()
@@ -116,15 +116,14 @@ def primas_por_aseguradora(resultados):
     return dict(sorted(sumas.items(), key=lambda item: item[1], reverse=True))
 
 
-def buscar_inconsistencias(resultados):
+def buscar_inconsistencias(resultados, ruta_clientes=None):
     """Devuelve una lista de textos con los 3 tipos de problema:
     1. cliente del maestro sin ninguna póliza
     2. póliza cuya cédula no está en el maestro
-    3. póliza sin prima o con fecha ilegible
-    """
+    3. póliza sin prima o con fecha ilegible"""
     inconsistencias = []
 
-    clientes_df = cargar_clientes()
+    clientes_df = cargar_clientes(ruta_clientes)
     cedulas_maestro = set()
     for _, fila in clientes_df.iterrows():
         cedulas_maestro.add(str(fila["Cedula"]).strip())

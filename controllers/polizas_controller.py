@@ -4,9 +4,22 @@ No calcula nada: solo llama a models/ y services/.
 """
 
 import io
+import os
 import zipfile
+from pathlib import Path
 
-from flask import Blueprint, render_template, send_file, abort
+from flask import (
+    Blueprint,
+    render_template,
+    send_file,
+    abort,
+    request,
+    session,
+    redirect,
+    url_for,
+    flash,
+)
+from werkzeug.utils import secure_filename
 
 from models.polizas import (
     calcular_resultados,
@@ -20,15 +33,22 @@ from services.generador_aviso import crear_aviso_pdf
 
 polizas_bp = Blueprint("polizas", __name__)
 
+# Carpeta donde se guardan temporalmente los Excel importados (fuera de data/)
+UPLOAD_DIR = Path("uploads")
+UPLOAD_DIR.mkdir(exist_ok=True)
+
 
 @polizas_bp.route("/")
 def inicio():
     """Tablero principal: contadores, primas por aseguradora, inconsistencias
     y tabla de pólizas ordenada por días para vencer (lo urgente primero)."""
-    resultados = calcular_resultados()
+    ruta_clientes = session.get("clientes_xlsx")
+    resultados = calcular_resultados(ruta_clientes=ruta_clientes)
     conteo = contar_por_estado(resultados)
     primas = primas_por_aseguradora(resultados)
-    inconsistencias = buscar_inconsistencias(resultados)
+    inconsistencias = buscar_inconsistencias(
+        resultados, ruta_clientes=ruta_clientes
+    )
     return render_template(
         "inicio.html",
         resultados=resultados,
@@ -82,3 +102,37 @@ def descargar_avisos():
         as_attachment=True,
         download_name="avisos.zip",
     )
+
+
+@polizas_bp.route("/importar-clientes", methods=["POST"])
+def importar_clientes():
+    """Recibe un Excel de clientes, lo guarda en uploads/ y lo guarda en sesión
+    para usarlo en el tablero (sin tocar data/)."""
+    if "archivo" not in request.files:
+        flash("No se seleccionó ningún archivo.", "error")
+        return redirect(url_for("polizas.inicio"))
+
+    archivo = request.files["archivo"]
+
+    if archivo.filename == "":
+        flash("No se seleccionó ningún archivo.", "error")
+        return redirect(url_for("polizas.inicio"))
+
+    if not archivo.filename.lower().endswith((".xlsx", ".xls")):
+        flash("El archivo debe ser un Excel (.xlsx o .xls).", "error")
+        return redirect(url_for("polizas.inicio"))
+
+    nombre_seguro = secure_filename(archivo.filename)
+    ruta_guardada = UPLOAD_DIR / nombre_seguro
+    archivo.save(str(ruta_guardada))
+
+    session["clientes_xlsx"] = str(ruta_guardada)
+    flash(f"Clientes importados desde '{archivo.filename}'.", "exito")
+    return redirect(url_for("polizas.inicio"))
+
+
+@polizas_bp.route("/procesar")
+def procesar():
+    """Recalcula resultados usando el Excel de sesión (o el maestro por defecto)
+    y vuelve al tablero."""
+    return redirect(url_for("polizas.inicio"))

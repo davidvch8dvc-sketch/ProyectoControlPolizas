@@ -63,10 +63,14 @@ def _texto_a_numero(texto):
         return None
 
 
-def cargar_clientes():
-    """Lee data/Maestro_Clientes.xlsx (hoja Clientes) con pandas.
+def cargar_clientes(ruta_excel=None):
+    """Lee el Excel de clientes con pandas.
+    Si se pasa ruta_excel, usa ese archivo; si no, lee el maestro por defecto
+    (Insumos_Control_Polizas/Maestro_Clientes.xlsx).
     Devuelve el DataFrame con la columna Cedula como texto sin espacios."""
-    df = pd.read_excel(CLIENTES_XLSX, sheet_name="Clientes")
+    if ruta_excel is None:
+        ruta_excel = CLIENTES_XLSX
+    df = pd.read_excel(ruta_excel, sheet_name="Clientes")
     df["Cedula"] = df["Cedula"].astype(str).str.strip()
     return df
 

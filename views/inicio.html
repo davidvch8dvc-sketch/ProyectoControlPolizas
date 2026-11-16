@@ -17,9 +17,24 @@
 </section>
 
 <section class="acciones">
-    <a href="{{ url_for('polizas.descargar_avisos') }}" class="boton descargar">
-        Descargar todos los avisos (.zip)
-    </a>
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+        {% if mensajes %}
+            <div class="flash-mensajes">
+                {% for categoria, mensaje in mensajes %}
+                    <div class="flash {{ categoria }}">{{ mensaje }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('polizas.importar_clientes') }}" method="post" enctype="multipart/form-data" style="display:inline-block; margin-right:0.5rem; vertical-align:middle;">
+        <input type="file" name="archivo" accept=".xlsx,.xls" required style="padding:0.5rem; border:1px solid #ccc; border-radius:4px; font-size:0.9rem; vertical-align:middle;">
+        <button type="submit" class="boton" style="vertical-align:middle;">Importar Excel nuevo</button>
+    </form>
+
+    <a href="{{ url_for('polizas.procesar') }}" class="boton" style="vertical-align:middle;">Ejecutar el proceso</a>
+
+    <a href="{{ url_for('polizas.descargar_avisos') }}" class="boton descargar" style="vertical-align:middle;">Exportar avisos (.zip)</a>
 </section>
 
 <section class="panel primas">

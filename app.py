@@ -20,6 +20,9 @@ app = Flask(
 
 app.register_blueprint(polizas_bp)
 
+# Clave secreta para sesiones y mensajes flash (cambiar en producción)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-cambiar-en-produccion")
+
 
 @app.template_filter("fecha")
 def _filtro_fecha(valor):
